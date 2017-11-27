@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { startGame } from './Actions';
+import { setScene, setUser } from './Actions';
 import Game from './Containers/Game';
+import GameOver from './Containers/GameOver/GameOver';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
@@ -41,13 +42,12 @@ class App extends Component {
     this.isAuthorized();
   }
   signIn() {
-    firebase.auth().signInWithPopup(provider).then(function(result) {
+    firebase.auth().signInWithPopup(provider).then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
       // console.log user info
-      this.setState({authorized: true});
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -70,7 +70,7 @@ class App extends Component {
   }
 
   startNewGame() {
-    this.props.newGame();
+    this.props.newGame("GAME");
   }
 
   isAuthorized() {
@@ -83,6 +83,7 @@ class App extends Component {
           displayName: user.displayName.split(" ")[0],
           avatar: user.photoURL,
         });
+        this.props.getUser(user.displayName, user.uid)
       } else {
         // No user is signed in.
         this.setState({authorized: false});
@@ -91,10 +92,15 @@ class App extends Component {
   }
 
   renderGame() {
-    if(this.props.start) {
+    if(this.props.scene === "GAME") {
       return (
         <Game key={"Game"}/>
-      )
+      );
+    }
+    if(this.props.scene === "GAMEOVER") {
+      return (
+        <GameOver key={"GameOver"} />
+      );
     }
     return (
       <div
@@ -192,14 +198,17 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    start: state.app.start
+    scene: state.app.scene
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    newGame: () => {
-      dispatch(startGame())
+    newGame: (scene) => {
+      dispatch(setScene(scene))
+    },
+    getUser: (userName, userId) => {
+      dispatch(setUser(userName, userId))
     }
   }
 }

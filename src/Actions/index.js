@@ -1,19 +1,43 @@
-export const startGame = text => {
+export const setScene = scene => {
   return {
-    type: 'START_GAME',
+    type: 'SET_SCENE',
+    scene
   }
 }
 
-export const setVisibilityFilter = filter => {
+export const setAnswer = answer => {
   return {
-    type: 'SET_VISIBILITY_FILTER',
-    filter
+    type: 'SET_ANSWER',
+    answer
   }
 }
 
-export const toggleTodo = id => {
+export const setScore = score => {
   return {
-    type: 'TOGGLE_TODO',
-    id
+    type: 'SET_SCORE',
+    score
+  }
+}
+
+export const setNum = (numA, numB) => {
+  return {
+    type: 'SET_NUM',
+    numA,
+    numB
+  }
+}
+
+export const setTimer = (timer) => {
+  return {
+    type: 'SET_TIMER',
+    timer
+  }
+}
+
+export const setUser = (userName, userId) => {
+  return {
+    type: 'SET_USER',
+    userName,
+    userId
   }
 }
