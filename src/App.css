@@ -53,3 +53,76 @@
   transform: translateY(500px);
   transition: transform 500ms ease-in, opacity 500ms ease-in;
 }
+
+.counter-enter {
+  position: absolute;
+  width: 100vw;
+  opacity: 0.01;
+}
+
+.counter-enter.counter-enter-active {
+  position: absolute;
+  width: 100vw;
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.counter-leave {
+  position: absolute;
+  width: 100vw;
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.counter-leave.counter-leave-active {
+  position: absolute;
+  width: 100vw;
+  opacity: 0.01;
+  transform: translateY(500px);
+  transition: transform 500ms ease-in, opacity 500ms ease-in;
+}
+
+.GameOver-logo {
+  animation: GameOver-logo-shake infinite 100ms linear;
+  height: 80px;
+}
+
+.GameOver-title {
+  font-size: 1.5em;
+}
+
+.Game-Over-enter {
+  position: absolute;
+  width: 100vw;
+  opacity: 0.01;
+  transform: translateY(-500px);
+}
+
+.Game-Over-enter.Game-Over-enter-active {
+  position: absolute;
+  width: 100vw;
+  opacity: 1;
+  transform: translateY(0px);
+  transition: transform 500ms ease-in, opacity 500ms ease-in;
+}
+
+.Game-Over-leave {
+  position: absolute;
+  width: 100vw;
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.Game-Over-leave.Game-Over-leave-active {
+  position: absolute;
+  width: 100vw;
+  opacity: 0.01;
+  transform: translateY(500px);
+  transition: transform 500ms ease-in, opacity 500ms ease-in;
+}
+
+@keyframes GameOver-logo-shake {
+  0% { transform: translate(-10px); }
+  50% { transform: translate(10px); }
+  100% { transform: translate(-10px); }
+}

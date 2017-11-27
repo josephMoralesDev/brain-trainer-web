@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
@@ -14,10 +18,17 @@ import registerServiceWorker from './registerServiceWorker';
 injectTapEventPlugin();
 let store = createStore(brainTrainerApp)
 
+const client = new ApolloClient({
+  link: new HttpLink({ uri: 'https://us-central1-brain-trainer-763ee.cloudfunctions.net/api/graphiql' }),
+  cache: new InMemoryCache()
+});
+
 ReactDOM.render(
   <MuiThemeProvider>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ApolloProvider>
   </MuiThemeProvider>, document.getElementById('root'));
 registerServiceWorker();
