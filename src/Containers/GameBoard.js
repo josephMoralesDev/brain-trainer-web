@@ -14,10 +14,10 @@ class GameBoard extends Component {
   checkAnswer(selectedBox) {
     if (this.props.correctBox === selectedBox) {
       this.props.newScore(this.props.score + 1);
-      this.props.setProblem(Math.floor(Math.random() * (100 - 1) + 1), Math.floor(Math.random() * (100 - 1) + 1));
+      this.props.setProblem(Math.floor(Math.random() * (11 - 1) + 1), Math.floor(Math.random() * (11 - 1) + 1));
     } else {
       this.props.newScore(this.props.score - 1);
-      this.props.setProblem(Math.floor(Math.random() * (100 - 1) + 1), Math.floor(Math.random() * (100 - 1) + 1));
+      this.props.setProblem(Math.floor(Math.random() * (11 - 1) + 1), Math.floor(Math.random() * (11 - 1) + 1));
     }
   }
 

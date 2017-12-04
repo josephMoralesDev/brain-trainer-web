@@ -5,13 +5,14 @@ const defaultState = {
   answer: 0,
   score: 0,
   timer: 30,
-  numA: Math.floor(Math.random() * (100 - 1) + 1),
-  numB: Math.floor(Math.random() * (100 - 1) + 1),
+  numA: Math.floor(Math.random() * (11 - 1) + 1),
+  numB: Math.floor(Math.random() * (11 - 1) + 1),
   correctBox: Math.floor(Math.random() * (5 - 1) + 1),
   box1: 0,
   box2: 0,
   box3: 0,
   box4: 0,
+  dialog: false,
 }
 
 const getRandom = (answer) => {
@@ -56,6 +57,11 @@ const app = (state = defaultState, action) => {
         ...state,
         userName: action.userName,
         userId: action.userId,
+      }
+    case 'SET_DIALOG':
+      return {
+        ...state,
+        dialog: !state.dialog
       }
     default:
       return state

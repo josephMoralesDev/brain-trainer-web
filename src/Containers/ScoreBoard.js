@@ -19,27 +19,29 @@ class ScoreBoard extends Component {
       clearInterval(countDownTimer);
       this.props.newScene("GAMEOVER");
     }, 30000);
-    this.props.setProblem(Math.floor(Math.random() * (100 - 1) + 1), Math.floor(Math.random() * (100 - 1) + 1));
+    this.props.setProblem(Math.floor(Math.random() * (11 - 1) + 1), Math.floor(Math.random() * (11 - 1) + 1));
   }
 
   render() {
     return (
       <div
         style={{
-          flex:.6,
+          flex: 1,
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          alignItems: 'flex-end',
+          alignItems: 'center',
           color: red500,
           fontWeight: 'bold',
           margin: 20,
+          border: "10px solid",
+          borderColor: red500
         }}
       >
         <div style={{flex: 1}}>
           {this.props.timer}s
         </div>
-        <div style={{fontSize: 35, flex:3}}>{this.props.numA} + {this.props.numB}</div>
+        <div style={{fontSize: '2.5rem', flex:3}}>{this.props.numA} + {this.props.numB}</div>
         <div style={{flex: 1}}>{this.props.score}</div>
       </div>
     );

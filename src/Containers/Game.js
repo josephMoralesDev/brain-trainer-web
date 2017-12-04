@@ -16,7 +16,7 @@ class Game extends Component {
       this.setState({countDown: this.state.countDown - 1})
     }, 1000);
 
-    setTimeout(function(){ clearInterval(countDownTimer) }, 3000);
+    setTimeout(function(){ clearInterval(countDownTimer) }, 4000);
   }
   render() {
     return (
