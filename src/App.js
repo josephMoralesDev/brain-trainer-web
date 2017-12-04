@@ -15,13 +15,17 @@ import google from './google.png';
 import './App.css';
 
 var firebase = require("firebase");
+require('firebase/firestore');
 
 var config = {
+  projectId: "brain-trainer-763ee",
   apiKey: "AIzaSyAp6ou6kh4UNSA16Syu-yW80kIBGb7Dp04",
   authDomain: "brain-trainer-763ee.firebaseapp.com",
   databaseURL: "https://brain-trainer-763ee.firebaseio.com",
 };
 firebase.initializeApp(config);
+
+export const db = firebase.firestore();
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -81,7 +85,7 @@ class App extends Component {
         this.setState({
           authorized: true,
           displayName: user.displayName.split(" ")[0],
-          avatar: user.photoURL,
+          avatar: user.providerData[0].photoURL,
         });
         this.props.getUser(user.displayName, user.uid)
       } else {
@@ -121,7 +125,13 @@ class App extends Component {
             alignItems: 'center',
           }}>
           <ActionFlightTakeoff className={this.state.authorized ? "App-logo" : ""} style={{height: '300px', width: '300px'}} color={red500}/>
-          <h1 className="App-title" style={{color: red500}}>BRAIN TRAINER</h1>
+          <h1 className="App-title"
+            style={{
+            color: red500,
+            borderBottom: "10px solid",
+            padding: 10,
+            borderColor: red500
+          }}>BRAIN TRAINER</h1>
         </div>
         {this.state.authorized ? (
           <div

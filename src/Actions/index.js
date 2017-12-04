@@ -41,3 +41,9 @@ export const setUser = (userName, userId) => {
     userId
   }
 }
+
+export const setDialog = () => {
+  return {
+    type: 'SET_DIALOG',
+  }
+}

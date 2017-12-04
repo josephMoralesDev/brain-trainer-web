@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { setScene, setTimer, setScore } from '../../Actions';
+import { setScene, setTimer, setScore, setDialog } from '../../Actions';
 import List from 'material-ui/svg-icons/action/list';
 import Renew from 'material-ui/svg-icons/action/autorenew';
 import IconButton from 'material-ui/IconButton';
@@ -12,12 +12,18 @@ class PlayerScore extends Component {
   constructor(props) {
     super(props);
     this.startNewGame = this.startNewGame.bind(this);
+    this.handleDialog = this.handleDialog.bind(this);
   }
   startNewGame() {
     this.props.setTime(30);
     this.props.newScore(0);
     this.props.newGame("GAME");
   }
+
+  handleDialog() {
+    this.props.openDialog();
+  }
+
   render() {
     return (
       <div
@@ -42,8 +48,10 @@ class PlayerScore extends Component {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            MozPerspective: 1000,
+            WebkitPerspective: 1000,
           }}>
-          <h1 style={{fontSize: '1.3rem'}}> New High Score! </h1>
+          <h1 style={{fontSize: '1.3rem'}}> {this.props.playersBest ? "New High Score!" : "Game Over"} </h1>
           <ActionFlightTakeoff className="App-logo" style={{height: '300px', width: '300px'}} color={red500}/>
         </div>
         <div
@@ -56,17 +64,7 @@ class PlayerScore extends Component {
             width: '100%',
           }}
         >
-          <div  style={{ flex: 1 }}>
-            <FlatButton
-              label="Retry"
-              labelPosition="before"
-              backgroundColor={red500}
-              labelStyle={{color: 'white'}}
-              hoverColor={'black'}
-              icon={<Renew color={'white'}/>}
-              onClick={this.startNewGame}
-            />
-          </div>
+          <h1 style={{flex: 1, fontSize: '1.2rem'}}>Your score: {this.props.score}</h1>
         </div>
         <div
           style={{
@@ -76,11 +74,44 @@ class PlayerScore extends Component {
             justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
+            margin: '20px',
           }}
         >
-          <h1 style={{flex: 1, fontSize: '1.2rem'}}>score: {this.props.score}</h1>
-          <h1 style={{flex: 1, fontSize: '1.2rem'}}>rank: 5</h1>
-          <div  style={{ flex: 1 }}><IconButton style={{backgroundColor:red500}}> <List color={'white'} /> </IconButton></div>
+          <div
+            style={{
+              flex: 1,
+              height: '100%',
+              display: 'flex',
+              margin: '20px',
+            }}
+          >
+            <IconButton
+              onClick={this.startNewGame}
+              style={{
+                backgroundColor:red500,
+                flex: 1,
+                height: 'auto',
+                width: 'auto',
+              }}
+            > <Renew size={20}color={'white'}/> </IconButton>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              height: '100%',
+              display: 'flex',
+              margin: '20px',
+            }}
+          >
+            <IconButton
+            onClick={this.handleDialog}
+            style={{
+              backgroundColor:red500,
+              flex: 1,
+              height: 'auto',
+              width: 'auto',
+            }}> <List size={20} color={'white'} /> </IconButton>
+          </div>
         </div>
       </div>
     );
@@ -103,6 +134,9 @@ const mapDispatchToProps = dispatch => {
     },
     newScore: (answer) => {
       dispatch(setScore(answer))
+    },
+    openDialog: () => {
+      dispatch(setDialog())
     },
   }
 }

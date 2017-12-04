@@ -1,43 +1,64 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { setDialog } from '../../Actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ActionFlightTakeoff from 'material-ui/svg-icons/action/alarm';
 import {red500} from 'material-ui/styles/colors';
 import PlayerScore from './PlayerScore';
+import {db} from '../../App.js'
+import LeaderBoard from '../LeaderBoard';
 
 class GameOver extends Component {
   constructor(props) {
     super(props);
     this.state = {
       countDown: 2,
+      playersBest: false,
     }
   }
 
   componentWillMount() {
-    console.log({
-      variables: {
-        id: this.props.userId,
-        newName: this.props.userName,
-        newScore: this.props.newScore
-      }
+    db.collection("high_scores").doc(this.props.userId).get().then((doc) => {
+        if (doc.exists) {
+            console.log(doc.data());
+            this.setState({ playersBest: this.props.newScore > doc.data().score });
+            if (this.props.newScore > doc.data().score) {
+              db
+              .collection("high_scores")
+              .doc(this.props.userId)
+              .set({
+                name: this.props.userName,
+                score: this.props.newScore
+              })
+              .then(() => {
+                console.log("Nice");
+              });
+            }
+        } else {
+          db
+          .collection("high_scores")
+          .doc(this.props.userId)
+          .set({
+            name: this.props.userName,
+            score: this.props.newScore
+          })
+          .then(() => {
+            console.log("Nice");
+          });
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
     });
-    console.log(this.props);
-    this.props.mutate()
-      .then(({ data }) => {
-        console.log('got data', data);
-      })
-      .catch((error) => {
-        console.log('there was an error sending the query', error);
-      });
+
+
 
     var countDownTimer = setInterval(() => {
       this.setState({countDown: this.state.countDown - 1})
     }, 1000);
 
-    setTimeout(function(){ clearInterval(countDownTimer) }, 2000);
+    setTimeout(function(){ clearInterval(countDownTimer) }, 3000);
   }
+
   render() {
     return (
       <div className="GameOver"
@@ -49,6 +70,7 @@ class GameOver extends Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <LeaderBoard />
         <ReactCSSTransitionGroup
           transitionName="Game-Over"
           transitionEnterTimeout={500}
@@ -72,7 +94,7 @@ class GameOver extends Component {
               <ActionFlightTakeoff className="GameOver-logo" style={{height: '250px', width: '250px'}} color={red500}/>
             </div>
           ) : (
-            <PlayerScore />
+            <PlayerScore playersBest={this.state.playersBest}/>
           )}
       </ReactCSSTransitionGroup>
       </div>
@@ -91,12 +113,4 @@ const mapStateToProps = state => {
 const ConnectedGameOver = connect(mapStateToProps)(GameOver);
 
 
-const createScore = gql`
-  mutation {
-    createScore(id: "32", newName: "fd", newScore: 3)
-  }
-`;
-
-const NewEntryWithData = graphql(createScore)(ConnectedGameOver);
-
-export default NewEntryWithData;
+export default ConnectedGameOver;
